@@ -103,7 +103,12 @@ document.addEventListener('DOMContentLoaded', function () {
         // Käydään läpi aikataulut ja muotoillaan ne 
         for (let i = 0; i < aikataulut.length; i++) {
             const aika = new Date(aikataulut[i].childNodes[0].nodeValue);
-            const muotoiltuAika = `${aika.getDate()}.${aika.getMonth() + 1}.${aika.getFullYear()} ${aika.getHours()}:${aika.getMinutes()}`;
+            
+            // Lisätään kaksi nollaa tunneille ja minuuteille
+            const tunti = aika.getHours().toString().padStart(2, '0');
+            const minuutti = aika.getMinutes().toString().padStart(2, '0');
+            
+            const muotoiltuAika = `${aika.getDate()}.${aika.getMonth() + 1}.${aika.getFullYear()} ${tunti}:${minuutti}`;
             ajat.push(muotoiltuAika);
         }
 
