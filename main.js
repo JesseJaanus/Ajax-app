@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
-    
+
     // Haetaan HTML-elementit
     const theaterSelect = document.getElementById('theaterSelect');
     const movieInfo = document.getElementById('movieInfo');
-    const omdbApiKey = '4eaea3cb'; 
+    const omdbApiKey = '4eaea3cb';
 
     // Haetaan elokuvateatterialueiden tiedot ja lisätään ne alasveto-valikkoon, dropdown-valikkoon jatkossa
-    fetch('http://www.finnkino.fi/xml/TheatreAreas/')
+    fetch('https://www.finnkino.fi/xml/TheatreAreas/')
         .then(response => response.text())
         .then(data => {
             const parser = new DOMParser();
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const selectedTheaterId = theaterSelect.value;
 
         // Haetaan valitun elokuvateatterin ohjelmisto
-        fetch(`http://www.finnkino.fi/xml/Schedule/?area=${selectedTheaterId}`)
+        fetch(`https://www.finnkino.fi/xml/Schedule/?area=${selectedTheaterId}`)
             .then(response => response.text())
             .then(data => {
                 näytäTiedot(data);
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(data, 'text/xml');
-        const elementit = xmlDoc.getElementsByTagName('Show'); 
+        const elementit = xmlDoc.getElementsByTagName('Show');
 
         // Käydään läpi jokainen elokuvataphtuma ja näytetään niiden tiedot
         for (let i = 0; i < elementit.length; i++) {
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const imdbID = div.getAttribute('data-imdb-id');
 
             // Haetaan tiedot OMDB API:sta
-            fetch(`http://www.omdbapi.com/?i=${imdbID}&apikey=${omdbApiKey}`)
+            fetch(`https://www.omdbapi.com/?i=${imdbID}&apikey=${omdbApiKey}`)
                 .then(response => response.json())
                 .then(data => {
                     // Tarkistetaan onko elokuvalla kuvaa ja näytetään se tai lisätään virheteksti
@@ -103,11 +103,11 @@ document.addEventListener('DOMContentLoaded', function () {
         // Käydään läpi aikataulut ja muotoillaan ne 
         for (let i = 0; i < aikataulut.length; i++) {
             const aika = new Date(aikataulut[i].childNodes[0].nodeValue);
-            
+
             // Lisätään kaksi nollaa tunneille ja minuuteille
             const tunti = aika.getHours().toString().padStart(2, '0');
             const minuutti = aika.getMinutes().toString().padStart(2, '0');
-            
+
             const muotoiltuAika = `${aika.getDate()}.${aika.getMonth() + 1}.${aika.getFullYear()} ${tunti}:${minuutti}`;
             ajat.push(muotoiltuAika);
         }
